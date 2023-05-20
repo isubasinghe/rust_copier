@@ -5,17 +5,13 @@
 mod plat;
 
 #[no_mangle]
-extern "C" fn kmain() {
-}
-
+extern "C" fn kmain() {}
 
 #[lang = "eh_personality"]
 extern "C" fn eh_personality() {}
 
-
 #[no_mangle]
-fn interrupt_handler() {
-}
+fn interrupt_handler() {}
 
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
@@ -34,8 +30,5 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 }
 
 fn abort() -> ! {
-
-
     loop {}
 }
-

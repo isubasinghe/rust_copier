@@ -16,9 +16,10 @@
       };
     };
     flake-utils.url = "github:numtide/flake-utils";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = { self, nixpkgs, crane, rust-overlay, flake-utils, ... }:
+  outputs = { self, nixpkgs, crane, rust-overlay, flake-utils, treefmt-nix, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -28,7 +29,7 @@
 
 
         rust = pkgs.rust-bin.nightly.latest.default.override {
-          extensions = [ "rust-src" "rustfmt" "rust-analyzer" "clippy"];
+          extensions = [ "rust-src" "rustfmt" "rust-analyzer" "clippy" ];
           targets = [ "riscv64gc-unknown-none-elf" ];
         };
 
@@ -38,8 +39,8 @@
             config = "riscv64-unknown-linux-gnu";
           };
         };
-        haskell = (pkgs.haskellPackages.ghcWithPackages (ps: [ 
-          ps.shake 
+        haskell = (pkgs.haskellPackages.ghcWithPackages (ps: [
+          ps.shake
           ps.haskell-language-server
           ps.ormolu
           ps.stack
@@ -47,7 +48,15 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ qemu spike rust riscv-toolchain.buildPackages.gcc haskell];
+          buildInputs = with pkgs; [ qemu spike rust riscv-toolchain.buildPackages.gcc haskell ];
         };
+        formatter = treefmt-nix.lib.mkWrapper
+          nixpkgs.legacyPackages.${system}
+          {
+            projectRootFile = "flake.nix";
+            programs.nixpkgs-fmt.enable = true;
+            programs.rustfmt.enable = true;
+            programs.ormolu.enable = true;
+          };
       });
 }
