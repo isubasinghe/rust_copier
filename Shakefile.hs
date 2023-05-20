@@ -25,14 +25,15 @@ main = shakeArgsWith (shakeOptions {shakeFiles = "_build", shakeColor = True, sh
 
       phony "clean" $ do
         putInfo "Cleaning files in build"
+        cmd_ "cargo clean"
         removeFilesAfter "_build" ["//*"]
 
       "_build/libmukernel.a" %> \out -> do
         rs <- getDirectoryFiles "" ["//*.rs"]
         need rs
         putInfo $ show rs
-        cmd_ "cargo build --release" "--features" platform
-        cmd_ "cp ./target/riscv64_soft_float/release/libmukernel.a" out
+        cmd_ "cargo build --release" "--features" platform "--target" ("src/plat/" ++ platform ++ "/rust.json")
+        cmd_ "cp ./target/rust/release/libmukernel.a" out
 
       "_build/os.elf" %> \out -> do
         putInfo "Making ELF file"
