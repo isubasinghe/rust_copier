@@ -39,6 +39,14 @@
             config = "riscv64-unknown-linux-gnu";
           };
         };
+
+        aarch64-toolchain = import nixpkgs {
+          localSystem = "${system}";
+          crossSystem = {
+            config = "aarch64-unknown-linux-gnu";
+          };
+        };
+
         haskell = (pkgs.haskellPackages.ghcWithPackages (ps: [
           ps.shake
           ps.haskell-language-server
@@ -48,7 +56,7 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ qemu spike rust riscv-toolchain.buildPackages.gcc haskell ];
+          buildInputs = with pkgs; [ qemu spike rust riscv-toolchain.buildPackages.gcc haskell aarch64-toolchain.gcc ];
         };
         formatter = treefmt-nix.lib.mkWrapper
           nixpkgs.legacyPackages.${system}
