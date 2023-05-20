@@ -6,7 +6,6 @@ mod plat;
 
 #[no_mangle]
 extern "C" fn kmain() {
-    plat::is_visionfive2();
 }
 
 
