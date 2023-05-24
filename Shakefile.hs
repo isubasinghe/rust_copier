@@ -57,4 +57,4 @@ main = shakeArgsWith
           cs <- getDirectoryFiles "" ["//*.c"]
           need asms
           need cs
-          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" "-Tsrc/plat/visionfive2/board.ld" "-o" out asms cs
+          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" ("-Tsrc/plat/" ++ platform ++ "/board.ld") "-o" out asms cs
