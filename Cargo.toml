@@ -15,5 +15,8 @@ panic="abort"
 panic="abort"
 
 [features]
-default = []
+default = ["visionfive2"]
 visionfive2 = []
+
+[dependencies]
+buddy_system_allocator = {version = "0.9.0"}

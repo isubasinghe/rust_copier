@@ -1,8 +1,12 @@
 #![no_std]
 #![no_main]
 #![feature(panic_info_message, lang_items, fn_align)]
-
+extern crate buddy_system_allocator;
 mod plat;
+mod arch;
+mod kmalloc;
+
+
 
 #[no_mangle]
 extern "C" fn kmain() {}

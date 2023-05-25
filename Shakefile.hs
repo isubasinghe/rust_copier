@@ -43,17 +43,13 @@ main = shakeArgsWith
         "_build/libmukernel.a" %> \out -> do
           rs <- getDirectoryFiles "" ["//*.rs"]
           need rs
-          putInfo $ show rs
           cmd_ "cargo build --release" "--features" platform "--target" ("src/plat/" ++ platform ++ "/rust.json")
           cmd_ "cp ./target/rust/release/libmukernel.a" out
 
         "_build/os.elf" %> \out -> do
           putInfo "Making ELF file"
-          putInfo $ show flags
-          putInfo $ show targets
           need ["_build/libmukernel.a"]
           asms <- getDirectoryFiles "" ["src/plat/" ++ platform ++ "//*.s"]
-          putInfo $ show asms
           cs <- getDirectoryFiles "" ["//*.c"]
           need asms
           need cs
