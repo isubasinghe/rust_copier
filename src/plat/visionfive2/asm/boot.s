@@ -22,7 +22,7 @@ _start:
 	bltu a2, a3, 1b
 2:	
 	la sp, _stack_end
-	j 2b
+	j kmain
 3:
 	wfi 
 	j 3b

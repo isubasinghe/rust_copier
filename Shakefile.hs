@@ -37,7 +37,6 @@ main = shakeArgsWith
 
         phony "clean" $ do
           putInfo "Cleaning files in build"
-          cmd_ "cargo clean"
           removeFilesAfter "_build" ["//*"]
 
         "_build/libmukernel.a" %> \out -> do
@@ -53,4 +52,4 @@ main = shakeArgsWith
           cs <- getDirectoryFiles "" ["//*.c"]
           need asms
           need cs
-          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" ("-Tsrc/plat/" ++ platform ++ "/board.ld") "-o" out asms cs
+          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" ("-Tsrc/plat/" ++ platform ++ "/board.ld") "-o" out asms cs "-L./target/rust/release" "-lmukernel"

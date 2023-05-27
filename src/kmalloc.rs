@@ -1,28 +1,20 @@
 use core::{alloc::GlobalAlloc, ptr::NonNull};
 
-use buddy_system_allocator::{Heap};
+use buddy_system_allocator::{Heap, LockedHeap};
 
-pub struct FakeMutex<T>(T);
-
-unsafe impl<T> Sync for FakeMutex<T> {}
-unsafe impl<T> Send for FakeMutex<T> {}
-
-pub struct SingleCoreHeap<const ORDER: usize>(FakeMutex<Heap<ORDER>>);
 
 #[global_allocator]
-static HEAP_ALLOCATOR: SingleCoreHeap<64>  = SingleCoreHeap(FakeMutex(Heap::<64>::empty()));
+static HEAP_ALLOCATOR: LockedHeap<64>  = LockedHeap::new();
+
+const MEM_COUNT: usize = 1024 * 1024 * 4;
+#[no_mangle]
+static MEM: [u8; MEM_COUNT] = [0; MEM_COUNT];
 
 
-unsafe impl<const ORDER: usize> Sync for SingleCoreHeap<ORDER> {}
-unsafe impl<const ORDER: usize> Send for SingleCoreHeap<ORDER> {}
+pub fn setup_heap() {
+    unsafe {
 
-unsafe impl<const ORDER: usize> GlobalAlloc for SingleCoreHeap<ORDER> {
-    unsafe fn dealloc(&self, ptr: *mut u8, layout: core::alloc::Layout) {
-        
+        HEAP_ALLOCATOR.lock().init(MEM.as_ptr() as usize, MEM_COUNT * core::mem::size_of::<u8>());
     }
-
-     unsafe fn alloc(&self, layout: core::alloc::Layout) -> *mut u8 {
-         todo!()
-    }
-
 }
+

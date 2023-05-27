@@ -92,7 +92,7 @@ SECTIONS
 	Since our CPU instructions are here, and our memory starts at
 	0x8000_0000, we need our entry point to line up here.
   */
-  .text : {
+  .text : ALIGN(4096) {
 	  /* 
 	    PROVIDE allows me to access a symbol called _text_start so
 		I know where the text section starts in the operating system.
@@ -169,7 +169,7 @@ SECTIONS
 	 able to choose which bits (R=read, W=write, X=execute) we want each memory segment
 	 to be able to do.
    */
-  .rodata : {
+  .rodata : ALIGN(4096) {
     PROVIDE(_rodata_start = .);
     *(.rodata .rodata.*)
     PROVIDE(_rodata_end = .);
@@ -179,7 +179,7 @@ SECTIONS
 	*/
   } >ram AT>ram :text
 
-  .data : {
+  .data : ALIGN(4096) {
 	/*
 	   . = ALIGN(4096) tells the linker to align the current memory location (which is
 	   0x8000_0000 + text section + rodata section) to 4096 bytes. This is because our paging
@@ -203,9 +203,10 @@ SECTIONS
     PROVIDE(_data_end = .);
   } >ram AT>ram :data
 
-  .bss : {
+  .bss : ALIGN(4096) {
     PROVIDE(_bss_start = .);
     *(.sbss .sbss.*) *(.bss .bss.*)
+    . += 2M;
     PROVIDE(_bss_end = .);
   } >ram AT>ram :bss
 
