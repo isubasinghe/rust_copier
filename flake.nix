@@ -56,7 +56,16 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ qemu spike rust riscv-toolchain.buildPackages.gcc haskell aarch64-toolchain.gcc ];
+          buildInputs = with pkgs; [ 
+            qemu 
+            spike 
+            rust 
+            riscv-toolchain.buildPackages.gcc 
+            riscv-toolchain.buildPackages.glibc
+            riscv-toolchain.buildPackages.glibc_multi 
+            haskell 
+            aarch64-toolchain.gcc 
+          ];
         };
         formatter = treefmt-nix.lib.mkWrapper
           nixpkgs.legacyPackages.${system}

@@ -49,7 +49,5 @@ main = shakeArgsWith
           putInfo "Making ELF file"
           need ["_build/libmukernel.a"]
           asms <- getDirectoryFiles "" ["src/plat/" ++ platform ++ "//*.s"]
-          cs <- getDirectoryFiles "" ["//*.c"]
           need asms
-          need cs
-          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" ("-Tsrc/plat/" ++ platform ++ "/board.ld") "-o" out asms cs "-L./target/rust/release" "-lmukernel"
+          cmd_ "riscv64-unknown-linux-gnu-gcc -static -ffreestanding -nostdlib -fno-exceptions -march=rv64gc -mabi=lp64" ("-Tsrc/plat/" ++ platform ++ "/board.ld") "-o" out asms "-L./target/rust/release" "-lmukernel"

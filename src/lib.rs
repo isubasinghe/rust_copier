@@ -1,15 +1,16 @@
 #![no_std]
 #![no_main]
-#![feature(panic_info_message, lang_items, fn_align)]
+#![feature(panic_info_message, lang_items, fn_align, core_intrinsics)]
 extern crate buddy_system_allocator;
 extern crate alloc;
 extern crate derive_more;
 extern crate libos;
+extern crate tock_registers;
 mod plat;
 mod arch;
 mod kmalloc;
 mod mem;
-
+mod drivers;
 use libos::uart::*;
 
 #[no_mangle]
@@ -54,4 +55,10 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 
 fn abort() -> ! {
     loop {}
+}
+
+#[cfg(test)]
+mod test {
+    fn test_runner() {
+    }
 }

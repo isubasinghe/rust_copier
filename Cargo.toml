@@ -22,3 +22,4 @@ visionfive2 = []
 buddy_system_allocator = {version = "0.9.0"}
 derive_more = "0.99.17"
 libos = { git="https://github.com/isubasinghe/libos.git" }
+tock-registers = "0.8.1"
