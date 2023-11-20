@@ -30,7 +30,7 @@
 
         rust = pkgs.rust-bin.nightly.latest.default.override {
           extensions = [ "rust-src" "rustfmt" "rust-analyzer" "clippy" ];
-          targets = [ "riscv64gc-unknown-none-elf" ];
+          targets = [ "aarch64-unknown-none" ];
         };
 
         riscv-toolchain = import nixpkgs {
@@ -43,7 +43,7 @@
         aarch64-toolchain = import nixpkgs {
           localSystem = "${system}";
           crossSystem = {
-            config = "aarch64-unknown-linux-gnu";
+            config = "aarch64-unknown-none";
           };
         };
 
@@ -57,13 +57,7 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [ 
-            qemu 
-            spike 
             rust 
-            riscv-toolchain.buildPackages.gcc 
-            riscv-toolchain.buildPackages.glibc
-            riscv-toolchain.buildPackages.glibc_multi 
-            haskell 
             aarch64-toolchain.gcc 
           ];
         };

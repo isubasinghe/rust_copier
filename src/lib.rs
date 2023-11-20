@@ -1,41 +1,11 @@
 #![no_std]
 #![no_main]
 #![feature(panic_info_message, lang_items, fn_align, core_intrinsics)]
-extern crate buddy_system_allocator;
-extern crate alloc;
-extern crate derive_more;
-extern crate libos;
-extern crate tock_registers;
-mod plat;
-mod arch;
-mod kmalloc;
-mod mem;
-mod drivers;
-use libos::uart::*;
 
-#[no_mangle]
-static mut OS_ELF_SZ: usize = 0xDEADBEEF;
-
-
-#[no_mangle]
-extern "C" fn kmain()  -> ! {
-    let mut udev = NS16550::new(0x10000000);
-    udev.put('H');
-    udev.put('e');
-    udev.put('l');
-    udev.put('l');
-    udev.put('o');
-    udev.put('\r');
-    udev.put('\n');
-    // kmalloc::setup_heap(); 
-    loop {}
-}
 
 #[lang = "eh_personality"]
 extern "C" fn eh_personality() {}
 
-#[no_mangle]
-fn interrupt_handler() {}
 
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
@@ -55,6 +25,24 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 
 fn abort() -> ! {
     loop {}
+}
+
+pub fn init() {
+}
+
+#[no_mangle]
+pub extern "C" fn init() {
+
+}
+
+#[no_mangle]
+pub extern "C" fn protected() {
+
+}
+
+#[no_mangle]
+pub extern "C" fn notified(idx: core::ffi::c_uint) {
+
 }
 
 #[cfg(test)]
